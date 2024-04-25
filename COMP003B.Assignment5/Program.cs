@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.Formatters;
-using System.Xml.Serialization;
 
 namespace COMP003B.Assignment5
 {

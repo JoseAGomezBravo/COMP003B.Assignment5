@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace COMP003B.Assignment5.Controllers
 {
     [ApiController]
-    [Route("api/[controller")]
+    [Route("api/[controller]")]
     public class BookController : Controller
     {
         private List<Book> _books = new List<Book>();
@@ -34,6 +34,49 @@ namespace COMP003B.Assignment5.Controllers
             }
 
             return book;
+        }
+
+        [HttpPost]
+        public ActionResult<Book> CreateBook(Book book)
+        {
+            book.Id = _books.Max(v => v.Id) + 1;
+
+            _books.Add(book);
+
+            return CreatedAtAction(nameof(GetBookbyId), new { id = book.Id }, book);
+        }
+
+        [HttpPut]
+        public ActionResult<Book> UpdateBook (int id, Book updatedBook)
+        {
+            var book = _books.Find(v => v.Id == id);
+
+            if (book == null)
+            {
+                return BadRequest();
+            }
+
+            book.Name = updatedBook.Name;
+            book.Description = updatedBook.Description;
+            book.Author = updatedBook.Author;
+
+            return NoContent();
+            
+        }
+
+        [HttpDelete]
+        public ActionResult DeleteBook(int id) 
+        {
+            var book = _books.Find(v => v.Id == id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            _books.Remove(book);
+
+            return NoContent();
         }
     }
 }
